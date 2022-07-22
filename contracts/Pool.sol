@@ -76,4 +76,8 @@ contract Pool is ERC20 {
   function calcPremium(uint256 amount) public returns (uint256){
     return ((amount*feeRate)/feePrecision);
   }
+
+  function assetBalance() public returns (uint256) {
+    return asset.balanceOf(address(this));
+  }
 }

@@ -1,4 +1,4 @@
-using Asset_ERC20 as underlying
+using Asset as underlying
 using SymbolicFlashLoanReceiver as flashLoanReceiver
 
 methods

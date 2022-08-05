@@ -29,14 +29,14 @@ methods
 /// `deposit` must increase the pool's underlying asset balance
 rule integrityOfDeposit {
 
-    uint balance_before = assetBalance();
+    mathint balance_before = assetBalance();
 
     env e; uint256 amount;
     deposit(e, amount);
 
-    uint balance_after = assetBalance();
+    mathint balance_after = assetBalance();
 
     assert balance_after == balance_before + amount,
-        "deposit must increase pool's underlying asset balance";
+        "deposit must increase the underlying balance of the pool";
 } 
 

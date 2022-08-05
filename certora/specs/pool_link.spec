@@ -11,7 +11,7 @@
 //// [guide]: https://docs.certora.com/en/latest/docs/user-guide/multicontract/index.html
 ////
 
-using Asset for underlying
+using Asset as underlying
 
 methods
 {
@@ -24,18 +24,21 @@ methods
     withdraw(uint256)                       returns(uint256)
 
     flashLoan(address, uint256)
+
+    underlying.balanceOf(address)           returns(uint256) envfree
 }
 
 /// `deposit` must increase the pool's underlying asset balance
 rule integrityOfDeposit {
 
-    uint balance_before = underlying.balanceOf(currentContract);
+    mathint balance_before = underlying.balanceOf(currentContract);
 
     env e; uint256 amount;
     deposit(e, amount);
 
-    uint balance_after = underlying.balanceOf(currentContract);
+    mathint balance_after = underlying.balanceOf(currentContract);
 
-    assert balance_after == balance_before + amount;
+    assert balance_after == balance_before + amount,
+        "deposit must increase the underlying balance of the pool";
 }
 

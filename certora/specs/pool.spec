@@ -24,10 +24,11 @@ methods
 rule integrityOfWithdraw {
     env e; uint256 amount;
 
-    uint balance_before = balanceOf(e.msg.sender);
+    mathint balance_before = balanceOf(e.msg.sender);
 
     withdraw(e, amount);
 
-    assert balanceOf(e.msg.sender) == balance_before - amount;
+    assert balanceOf(e.msg.sender) == balance_before - amount,
+        "withdraw must increase the sender's value by `amount`";
 } 
 

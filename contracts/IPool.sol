@@ -4,5 +4,5 @@ interface IPool {
     // Withdraw shares and returns the anount of underlying token transfered to msg.sender 
     function withdraw(uint256 shares) external returns (uint256);
     // Flashlaon an amount of underlying token and calls reciverAddress 
-    function FlashLoan(address receiverAddress, uint256 amount) external ;
+    function flashLoan(address receiverAddress, uint256 amount) external ;
 }

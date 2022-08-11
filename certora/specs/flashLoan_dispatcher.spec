@@ -16,10 +16,10 @@
 using Asset as underlying
 
 methods {
-    balanceOf(address)                      returns(uint256) envfree
+    balanceOf(address)                        returns(uint256) envfree
 
-    underlying.balanceOf(address)           returns(uint256) envfree
-    executeOperation(uint256,uint256,address) returns (bool) => HAVOC_ALL
+    underlying.balanceOf(address)             returns(uint256) envfree
+    executeOperation(uint256,uint256,address) returns (bool) => DISPATCHER
 }
 
 /// flash loans must increase the pool's underlying asset balance, assuming the
@@ -28,6 +28,7 @@ rule flashLoanIncreasesBalance {
     address receiver; uint256 amount; env e;
 
     require balanceOf(receiver) == 0;
+    require e.msg.sender != currentContract;
 
     mathint balance_before = underlying.balanceOf(currentContract);
 

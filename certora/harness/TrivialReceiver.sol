@@ -9,6 +9,7 @@ contract TrivialReceiver is IFlashLoanReceiver {
         address initiator
     ) external override(IFlashLoanReceiver) returns (bool) {
         // do nothing
+        return true;
     }
 }
 

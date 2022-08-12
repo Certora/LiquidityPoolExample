@@ -34,7 +34,6 @@ methods {
 rule flashLoanIncreasesBalance {
     address receiver; uint256 amount; env e;
 
-    require balanceOf(receiver) == 0;
     require e.msg.sender != currentContract;
 
     mathint balance_before = underlying.balanceOf(currentContract);

@@ -1,22 +1,20 @@
 pragma solidity >= 0.8.0;
 
 import "../../contracts/IFlashLoanReceiver.sol";
-import "../../contracts/Pool.sol";
+import "../../contracts/IERC20.sol";
 
 contract TransferReceiver is IFlashLoanReceiver {
-    address donor;
+    IERC20  underlying;
     uint    transfer_amount;
-    Pool    pool;
+    address pool;
 
     function executeOperation(
         uint256 amount,
         uint256 premium,
         address initiator
     ) external override(IFlashLoanReceiver) returns (bool) {
-        // receive tokens from a donor, and then withdraw them.  This is a valid
-        // way to reduce the underlying balance of the pool.
-        pool.transferFrom(donor, address(this), amount);
-        pool.withdraw(amount);
+        underlying.transferFrom(pool, address(this), transfer_amount);
+        return true;
     }
 }
 

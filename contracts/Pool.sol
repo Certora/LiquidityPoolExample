@@ -73,11 +73,11 @@ contract Pool is ERC20 {
     asset.transferFrom(msg.sender,address(this),amountPlusPremium);
   }
 
-  function calcPremium(uint256 amount) public returns (uint256){
+  function calcPremium(uint256 amount) public view returns (uint256){
     return ((amount*feeRate)/feePrecision);
   }
 
-  function assetBalance() public returns (uint256) {
+  function assetBalance() public view returns (uint256) {
     return asset.balanceOf(address(this));
   }
 }

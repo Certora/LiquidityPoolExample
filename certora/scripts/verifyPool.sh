@@ -3,7 +3,7 @@ certoraRun \
     contracts/Asset.sol          \
     certora/helpers/tokens/*.sol \
     certora/harness/*.sol        \
-    --verify Pool:certora/specs/pool_link.spec \
+    --verify Pool:certora/specs/pool.spec \
     --solc solc8.0 \
     --link Pool:asset=Asset \
     --msg "Pool complete spec" \

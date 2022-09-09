@@ -2,31 +2,39 @@ pragma solidity >= 0.8.0;
 
 import "../../contracts/IFlashLoanReceiver.sol";
 import "../../contracts/IPool.sol";
+import "./ArbitraryValues.sol";
 
-contract FlexibleReceiver is IFlashLoanReceiver {
+/**
+ * A flexible implementation of the FlashLoanReceiver callback that
+ * nondeterministically makes calls back to the token.
+ */
+contract FlexibleReceiver is IFlashLoanReceiver, ArbitraryValues {
     IPool   token;
-    uint8   callbackChoice;
 
-    uint    arbitraryUint;
-    address arbitraryAddress1;
-    address arbitraryAddress2;
-
+    /**
+     * Nondeterministically call {deposit}, {transferFrom}, {withdraw},
+     * {transfer}, or {approve} on the {token}.
+     *
+     * @return true
+     */
     function executeOperation(
         uint256 amount,
         uint256 premium,
         address initiator
     ) external override(IFlashLoanReceiver) returns (bool) {
+
+        uint    callbackChoice    = arbitraryUint();
+
         if (callbackChoice == 0)
-            token.deposit(arbitraryUint);
+            token.deposit(arbitraryUint());
         else if (callbackChoice == 1)
-            token.transferFrom(arbitraryAddress1,arbitraryAddress2,arbitraryUint);
+            token.transferFrom(arbitraryAddress(),arbitraryAddress(),arbitraryUint());
         else if (callbackChoice == 2)
-            token.withdraw(arbitraryUint);
+            token.withdraw(arbitraryUint());
         else if (callbackChoice == 3)
-            token.transfer(arbitraryAddress1,arbitraryUint);
+            token.transfer(arbitraryAddress(),arbitraryUint());
         else if (callbackChoice == 4)
-            token.approve(arbitraryAddress1,arbitraryUint);
-        else assert(false);
+            token.approve(arbitraryAddress(),arbitraryUint());
 
         return true;
     }

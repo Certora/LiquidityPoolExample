@@ -2,7 +2,7 @@ pragma solidity >= 0.8.0;
 
 import "../../contracts/IFlashLoanReceiver.sol";
 import "../../contracts/IPool.sol";
-import "./ArbitraryValues.sol";
+import "../helpers/ArbitraryValues.sol";
 
 /**
  * A flexible implementation of the FlashLoanReceiver callback that

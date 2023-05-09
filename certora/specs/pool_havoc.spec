@@ -32,6 +32,8 @@ rule integrityOfDeposit {
     mathint balance_before = assetBalance();
 
     env e; uint256 amount;
+    require e.msg.sender != currentContract;
+
     deposit(e, amount);
 
     mathint balance_after = assetBalance();

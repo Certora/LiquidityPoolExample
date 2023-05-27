@@ -1,28 +1,28 @@
-using Asset as underlying
-using SymbolicFlashLoanReceiver as flashLoanReceiver
+using Asset as underlying;
+using SymbolicFlashLoanReceiver as flashLoanReceiver;
 
  methods
 {
     // pool's erc20 function
-    balanceOf(address) returns(uint256) envfree
-    totalSupply() returns(uint256) envfree
+    function balanceOf(address) external returns(uint256) envfree;
+    function totalSupply() external returns(uint256) envfree;
     // pools additional envfree functions
-    amountToShares(uint256 amount) returns (uint256) envfree    
-    sharesToAmount(uint256 amount) returns (uint256) envfree    
-    calcPremium(uint256 amount) returns (uint256) envfree    
+    function amountToShares(uint256 amount) external returns (uint256) envfree;
+    function sharesToAmount(uint256 amount) external returns (uint256) envfree;
+    function calcPremium(uint256 amount) external returns (uint256) envfree;
 
     // for checing call backs to the pool's function
-    deposit(uint256) returns(uint256)  => DISPATCHER(true)
-    withdraw(uint256) returns (uint256)  => DISPATCHER(true)
-    flashLoan(address, uint256)  => DISPATCHER(true)
+    function _.deposit(uint256) external returns(uint256)  => DISPATCHER(true);
+    function _.withdraw(uint256) external returns (uint256)  => DISPATCHER(true);
+    function _.flashLoan(address, uint256)  external => DISPATCHER(true);
    
     // flash loan receiver function
-    executeOperation(uint256,uint256,address) => DISPATCHER(true)
+    function _.executeOperation(uint256,uint256,address) external => DISPATCHER(true);
     //erc20 function
-    transfer(address, uint256) returns (bool) => DISPATCHER(true)
-    transferFrom(address, address, uint256) returns (bool) => DISPATCHER(true)
+    function _.transfer(address, uint256) external returns (bool) => DISPATCHER(true);
+    function _.transferFrom(address, address, uint256) external returns (bool) => DISPATCHER(true);
     //erc20 function for calling from spec
-    underlying.balanceOf(address) returns(uint256) envfree
+    function underlying.balanceOf(address) external returns(uint256) envfree;
  
 }
 	
@@ -62,9 +62,9 @@ using SymbolicFlashLoanReceiver as flashLoanReceiver
 	
 	rule more_user_shares_less_underlying(method f) 
 	filtered {
-		f -> f.selector != flashLoan(address, uint256).selector  && 
-            f.selector != transfer(address, uint256).selector && 
-			f.selector != transferFrom(address, address, uint256).selector && !f.isView
+		f -> f.selector != sig:flashLoan(address, uint256).selector  && 
+            f.selector != sig:transfer(address, uint256).selector && 
+			f.selector != sig:transferFrom(address, address, uint256).selector && !f.isView
 	}
 	{
 		env e;
@@ -150,8 +150,8 @@ using SymbolicFlashLoanReceiver as flashLoanReceiver
 	}
 	
 	rule user_solvency_without_flashloan(address user, method f) filtered {
-		f -> f.selector != flashLoan(address,uint256).selector  &&  
-            f.selector != transferFrom(address, address, uint256).selector
+		f -> f.selector != sig:flashLoan(address,uint256).selector  &&  
+            f.selector != sig:transferFrom(address, address, uint256).selector
 	}
 	{
 		env e;

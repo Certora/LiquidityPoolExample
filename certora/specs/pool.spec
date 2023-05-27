@@ -1,23 +1,23 @@
-import "../helpers/erc20.spec"
+import "../helpers/erc20.spec";
 
 methods
 {
     // envfree declarations
-    balanceOf(address) returns(uint256) envfree
-    totalSupply()      returns(uint256) envfree
-    asset()            returns(address) envfree
+    function balanceOf(address) external returns(uint256) envfree;
+    function totalSupply()      external returns(uint256) envfree;
+    function asset()            external returns(address) envfree;
 
     // for checing call backs to the pool's function
-    deposit(uint256)  returns(uint256) => DISPATCHER(true)
-    withdraw(uint256) returns(uint256) => DISPATCHER(true)
-    flashLoan(address, uint256)        => DISPATCHER(true)
+    function _.deposit(uint256)  external => DISPATCHER(true);
+    function _.withdraw(uint256) external => DISPATCHER(true);
+    function _.flashLoan(address, uint256)        external => DISPATCHER(true);
    
     // flash loan receiver function
-    executeOperation(uint256,uint256,address) => DISPATCHER(true)
+    function _.executeOperation(uint256,uint256,address) external => DISPATCHER(true);
 
     // harness functions
-    underlyingBalance()            returns(uint256) envfree
-    underlyingAllowance(address a) returns(uint256) envfree
+    function underlyingBalance()            external returns(uint256) envfree;
+    function underlyingAllowance(address a) external returns(uint256) envfree;
  
 }
 

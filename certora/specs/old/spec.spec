@@ -1,33 +1,33 @@
-using Asset as underlying
-using SymbolicFlashLoanReceiver as flashLoanReceiver
+using Asset as underlying;
+using SymbolicFlashLoanReceiver as flashLoanReceiver;
 
 methods
  {
       // pool's erc20 function
-     balanceOf(address) returns(uint256) envfree
-     totalSupply() returns(uint256) envfree
-     underlying.balanceOf(address) returns(uint256) envfree
+     function balanceOf(address) external returns(uint256) envfree;
+     function totalSupply() external returns(uint256) envfree;
+     function underlying.balanceOf(address) external returns(uint256) envfree;
 
-     executeOperation(uint256,uint256,address) => DISPATCHER(true)
-     transfer(address, uint256) returns (bool) => DISPATCHER(true)
-     transferFrom(address, address, uint256) returns (bool) => DISPATCHER(true)
-     deposit(uint256) returns(uint256)  => DISPATCHER(true)
-     withdraw(uint256) returns (uint256)  => DISPATCHER(true)
-     FlashLoan(address, uint256)  => DISPATCHER(true)
-     amountToShares(uint256 amount) returns (uint256) envfree    
-     sharesToAmount(uint256 amount) returns (uint256) envfree    
- }
+     function _.executeOperation(uint256,uint256,address) external => DISPATCHER(true);
+     function _.transfer(address, uint256) external returns (bool) => DISPATCHER(true);
+     function _.transferFrom(address, address, uint256) external returns (bool) => DISPATCHER(true);
+     function _.deposit(uint256) external returns(uint256)  => DISPATCHER(true);
+     function _.withdraw(uint256) external returns (uint256)  => DISPATCHER(true);
+     function _.FlashLoan(address, uint256)  external => DISPATCHER(true);
+     function amountToShares(uint256 amount) external returns (uint256) envfree;
+     function sharesToAmount(uint256 amount) external returns (uint256) envfree;
+ };
 
     definition absDiff(mathint x, mathint y) returns mathint = x > y ? x - y : y - x;
 
 
      
-invariant totalSupply_LE_balance()
-    totalSupply() <= underlying.balanceOf(currentContract)
+invariant totalSupply_LE_balance();
+    function totalSupply() <= underlying.balanceOf(currentContract) external;
 {
         preserved with (env e){
         require e.msg.sender != currentContract;
-         }
+         };
 }
 
 invariant totalSupply_vs_balance()
@@ -49,7 +49,7 @@ rule deposit_GR_zero(){ //failing due to bugs in the code
 }
 
 rule more_user_shares_less_underlying(method f) // failures need to check
-        filtered {f -> f.selector != transfer(address,uint256).selector && f.selector != transferFrom(address,address,uint256).selector && !f.isView }
+        filtered {f -> f.selector != sig:transfer(address,uint256).selector && f.selector != sig:transferFrom(address,address,uint256).selector && !f.isView }
         {
     env e;
 
@@ -149,7 +149,7 @@ require fee_for_none_LP > 0;
 // if (fee_for_none_LP == 0) {fee_for_none_LP = 1;}
 
 // assert shares1 == shares2;
-// assert poolBalance2 > poolBalance1 => f.selector == FlashLoan(address flashLoanReceiver,uint256 amount).selector;
+// assert poolBalance2 > poolBalance1 => f.selector == sig:FlashLoan(address flashLoanReceiver,uint256 amount).selector;
 // assert total_post > total_pre =>  total_post - total_pre <= fee  && user!=e.msg.sender;
 // assert toatal_post < total_pre => total_pre - total_post <= fee  && user==e.msg.sender;
 
@@ -161,8 +161,8 @@ assert (user != e.msg.sender && shares1 == 0) => (total_pre == total_post);
 assert (user == e.msg.sender && shares1 == 0) => (diffTotals2 == fee_for_none_LP);
 }
 
-rule user_solvency_without_flashloan(address user, method f)filtered { f-> /*f.selector != FlashLoan(address,uint256).selector  
-&& */ f.selector != transferFrom(address,address,uint256).selector }{
+rule user_solvency_without_flashloan(address user, method f)filtered { f-> /*f.selector != sig:FlashLoan(address,uint256).selector  
+&& */ f.selector != sig:transferFrom(address,address,uint256).selector }{
 env e;
 // require user != e.msg.sender;
 require user != currentContract && user != flashLoanReceiver ;

@@ -11,21 +11,21 @@
 //// [guide]: https://docs.certora.com/en/latest/docs/user-guide/multicontract/index.html
 ////
 
-using Asset as underlying
+using Asset as underlying;
 
 methods
 {
-    balanceOf(address)                      returns(uint256) envfree
-    totalSupply()                           returns(uint256) envfree
-    transfer(address, uint256)              returns(bool)
-    transferFrom(address, address, uint256) returns(bool)
+    function balanceOf(address)                      external returns(uint256) envfree;
+    function totalSupply()                           external returns(uint256) envfree;
+    function transfer(address, uint256)              external returns(bool);
+    function transferFrom(address, address, uint256) external returns(bool);
 
-    deposit(uint256)                        returns(uint256)
-    withdraw(uint256)                       returns(uint256)
+    function deposit(uint256)                        external returns(uint256);
+    function withdraw(uint256)                       external returns(uint256);
 
-    flashLoan(address, uint256)
+    function flashLoan(address, uint256) external;
 
-    underlying.balanceOf(address)           returns(uint256) envfree
+    function underlying.balanceOf(address)           external returns(uint256) envfree;
 }
 
 /// `deposit` must increase the pool's underlying asset balance

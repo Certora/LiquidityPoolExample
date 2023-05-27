@@ -1,18 +1,18 @@
-using Asset as underlying
+using Asset as underlying;
 
 
 methods
 {
     // pool mathematical function
-    amountToShares(uint256 amount) returns (uint256) envfree    
-    sharesToAmount(uint256 shares) returns (uint256) envfree    
-    calcPremium(uint256 amount) returns (uint256) envfree 
-    feeRate() returns (uint256) envfree   
+    function amountToShares(uint256 amount) external returns (uint256) envfree;
+    function sharesToAmount(uint256 shares) external returns (uint256) envfree;
+    function calcPremium(uint256 amount) external returns (uint256) envfree;
+    function feeRate() external returns (uint256) envfree;
 
-    totalSupply() returns(uint256) envfree
+    function totalSupply() external returns(uint256) envfree;
 
     //erc20 function for calling from spec
-    underlying.balanceOf(address) returns(uint256) envfree
+    function underlying.balanceOf(address) external returns(uint256) envfree;
 }
 
 function poolBalance() returns uint256 {

@@ -20,13 +20,13 @@
  * [guide]: https://docs.certora.com/en/latest/docs/user-guide/multicontract/index.html#working-with-unknown-contracts
  */
 
-using Asset as underlying
+using Asset as underlying;
 
 methods {
-    balanceOf(address)                        returns(uint256) envfree
+    function balanceOf(address)                        external returns(uint256) envfree;
 
-    underlying.balanceOf(address)             returns(uint256) envfree
-    executeOperation(uint256,uint256,address) returns (bool) => DISPATCHER(true)
+    function underlying.balanceOf(address)             external returns(uint256) envfree;
+    function _.executeOperation(uint256,uint256,address) external => DISPATCHER(true);
 }
 
 /// flash loans must increase the pool's underlying asset balance, assuming the

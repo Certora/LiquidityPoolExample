@@ -56,7 +56,7 @@ jobs:
           message="$(git log -n 1 --pretty=format:'CI ${{matrix.params.name}} %h .... %s')";
           certoraRun \
             certora/conf/${{ matrix.params.command }} \
-            --msg "$(echo $message | sed 's/[^a-zA-Z0-9., _-]/ /g')";
+            --msg "$(echo $message | sed 's/[^a-zA-Z0-9., _-]/ /g')" ||
           test "($? -e 0) -e ('${{matrix.params.expect}}' != fail)"
         env:
           # For this to work, you must set your CERTORAKEY secret on the github

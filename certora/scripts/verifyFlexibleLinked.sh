@@ -6,7 +6,6 @@ certoraRun \
     --link Pool:asset=Asset \
     --link FlexibleReceiver:token=Pool \
     --verify Pool:certora/specs/flashLoan_dispatcher.spec \
-    --solc solc8.0 \
-    --msg "flashLoan with linked flexible dispatchee" \
-    --send_only
+    --solc solc-0.8.0 \
+    --msg "flashLoan with linked flexible dispatchee"
 

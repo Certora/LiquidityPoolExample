@@ -1,23 +1,23 @@
-using Asset as underlying
-using SymbolicFlashLoanReceiver as flashLoanReceiver
+using Asset as underlying;
+using SymbolicFlashLoanReceiver as flashLoanReceiver;
 
 methods
 {
     // pool's erc20 function
-    balanceOf(address) returns(uint256) envfree
-    totalSupply() returns(uint256) envfree
+    function balanceOf(address) external returns(uint256) envfree;
+    function totalSupply() external returns(uint256) envfree;
     // for checing call backs to the pool's function
-    deposit(uint256) returns(uint256)  => DISPATCHER(true)
-    withdraw(uint256) returns (uint256)  => DISPATCHER(true)
-    flashLoan(address, uint256)  => DISPATCHER(true)
+    function _.deposit(uint256) external returns(uint256)  => DISPATCHER(true);
+    function _.withdraw(uint256) external returns (uint256)  => DISPATCHER(true);
+    function _.flashLoan(address, uint256)  external => DISPATCHER(true);
    
     // flash loan receiver function
-    executeOperation(uint256,uint256,address) => DISPATCHER(true)
+    function _.executeOperation(uint256,uint256,address) external => DISPATCHER(true);
     //erc20 function
-    transfer(address, uint256) returns (bool) => DISPATCHER(true)
-    transferFrom(address, address, uint256) returns (bool) => DISPATCHER(true)
+    function _.transfer(address, uint256) external returns (bool) => DISPATCHER(true);
+    function _.transferFrom(address, address, uint256) external returns (bool) => DISPATCHER(true);
     //erc20 function for calling from spec
-    underlying.balanceOf(address) returns(uint256) envfree
+    function underlying.balanceOf(address) external returns(uint256) envfree;
  
 }
 
@@ -64,16 +64,16 @@ rule changeLpProvider(address user, method f) {
     bool isLPproviderBefore = balanceOf(user) > 0 ;
     
 
-    if(f.selector == deposit(uint256).selector)
+    if(f.selector == sig:deposit(uint256).selector)
         deposit(e, amount);
-    else if(f.selector == withdraw(uint256).selector)
+    else if(f.selector == sig:withdraw(uint256).selector)
         withdraw(e, amount);
     else    
         f(e,args);
     
     bool isLPproviderAfter = balanceOf(user) > 0 ;
-    assert f.selector == deposit(uint256).selector => isLPproviderAfter;
-    assert f.selector == withdraw(uint256).selector => isLPproviderBefore; 
+    assert f.selector == sig:deposit(uint256).selector => isLPproviderAfter;
+    assert f.selector == sig:withdraw(uint256).selector => isLPproviderBefore; 
 }
 
 /*
@@ -84,16 +84,16 @@ rule changeTotalSupply(method f) {
     env e;
     calldataarg args;
     uint256 amount;
-    if(f.selector == deposit(uint256).selector)
+    if(f.selector == sig:deposit(uint256).selector)
         deposit(e, amount);
-    else if(f.selector == withdraw(uint256).selector)
+    else if(f.selector == sig:withdraw(uint256).selector)
         withdraw(e, amount);
     else    
         f(e,args);
     
     uint256 after = totalSupply() ;
-    assert after > before <=> ( f.selector == deposit(uint256).selector && amount > 0) ; 
-    assert after < before <=> ( f.selector == withdraw(uint256).selector && amount > 0) ;  
+    assert after > before <=> ( f.selector == sig:deposit(uint256).selector && amount > 0) ; 
+    assert after < before <=> ( f.selector == sig:withdraw(uint256).selector && amount > 0) ;  
 }
 
 /*

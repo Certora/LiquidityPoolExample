@@ -1,6 +1,5 @@
 certoraRun contracts/Pool.sol \
     --verify Pool:certora/specs/pool_havoc.spec \
-    --solc solc8.0 \
-    --msg "Pool with no summarization" \
-    --send_only
+    --solc solc-0.8.0 \
+    --msg "Pool with no summarization"
 
